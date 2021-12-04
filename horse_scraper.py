@@ -1,11 +1,12 @@
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager            #Automatically use the right version for the driver
+#from webdriver_manager.chrome import ChromeDriverManager            #Automatically use the right version for the driver
 
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC #test
 from selenium.webdriver.support.ui import WebDriverWait #test
+
 
 
 from time import sleep
@@ -26,7 +27,7 @@ options.add_argument('--disable-dev-shm-usage')
 options.add_argument("disable-infobars")
 options.add_argument("--remote-debugging-port=9231")
 driver = webdriver.Chrome(options=options, executable_path="/usr/local/bin/chromedriver")
-
+#driver = webdriver.Chrome(ChromeDriverManager().install())
 
 #-------------------------------------------------------------------------------------------------------------------------
 
@@ -44,7 +45,7 @@ def get_horses():
 
         # print(saturday + " 2nd loop")
 
-    uri = "https://www.atg.se/spel/" + saturday + "/V75/"                           #Source to ATG race
+    uri = "https://www.atg.se/spel/" + saturday + "/V75/"                           #Source to ATG race                    
     print("Getting horses from: " + uri)
     file_name = "../horse_csv/v75_" + saturday + '.csv'
     race_list = []
@@ -73,7 +74,9 @@ def get_horses():
         else:
             bool = True
 
-
+    id="onetrust-accept-btn-handler"
+    #driver.execute_script("arguments[0].click();", WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Godkänn alla cookies']"))))
+    #driver.execute_script("arguments[0].click();", WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, "//button[@data-test-id='campaign-close-button']")))) #För att stänga äckliga kampanjen
     #button = driver.find_element(By.XPATH, '//button[text()="Anpassa"]')        #Dynamically interact with website to get more stats on horses
     #WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Anpassa']"))).click()
     driver.execute_script("arguments[0].click();", WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Anpassa']")))) #Needed for finding button

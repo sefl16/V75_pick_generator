@@ -1,16 +1,29 @@
 import horse_scraper
 import brain
 import argparse
-
-parser = argparse.ArgumentParser()
-parser.parse_args()
+import sys
 
 
+example_text = '''Example of use: python3 main.py -S 3 -M 400'''
 
+#------------------------HANDLING ALL INPUT OF ARGUMENTS-------------------------
+parser = argparse.ArgumentParser(description="Pick generator for V75\nmain –S <The number of Spikar> -M <The ammount of money>",
+                                 epilog=example_text,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
 
+parser.add_argument("-S", "--nr_of_spikar", type=int, help="Specify the number of spikar that the system will use")
+parser.add_argument("-M", "--ammount_of_money", type=int, help="Specify the ammount of money the system will pick horses to bet on")
+
+if len(sys.argv) < 2:
+    print("For help use -h flag")
+    sys.exit(1)
+
+args = parser.parse_args()
+
+#----------------------------WHEN HELP IS TRIGGERED, THE CHROMEDRIVER AINT KILLED, NEED TO BE FIXED-----------
 
 file_name = horse_scraper.get_horses()
-my_horses = brain.random_pick_generator(3, 400)
+my_horses = brain.random_pick_generator(args.nr_of_spikar, args.ammount_of_money)
 horse_pick_order = brain.rate_my_horse(file_name, my_horses)
 
 
